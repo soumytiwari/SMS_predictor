@@ -1,0 +1,66 @@
+Transaction Alert for John Doe
+
+Account: ********9876 (Checking Account)
+Bank: Woodgrove Financial
+
+Transaction Details:
+- Transaction ID: TXN2024040311320001
+- Date: 04/03/2024
+- Time: 11:32 AM
+- Type: Online Transfer
+- Amount: $500.00 
+- Category: Debit
+
+
+Account Balances:
+- New Balance: $12,987.29
+
+User Email: user@example.com
+If you didn't make the transaction, please contact our customer support.
+Thank you for banking with Woodgrove Financial.
+
+
+--------------------------------------------------------------------------------------------
+Transaction Alert for John Doe
+
+Account: ********9876 (Checking Account)
+Bank: Woodgrove Financial
+Date: 04/03/2024
+Time: 11:32 AM
+
+Transaction Details:
+
+1. Transaction ID: TXN2024040311320001
+   Transaction Type: Online Transfer
+   Transaction Category: Debit
+   Description: Transfer from John Doe to Jane Smith
+   Amount: $500.00
+
+2. Transaction ID: TXN2024040311320002
+   Transaction Type: Interest Credit
+   Transaction Category: Credit
+   Description: Monthly Interest on Savings Account
+   Amount: $25.00
+
+3. Transaction ID: TXN2024040311320003
+   Transaction Type: Loan Payment
+   Transaction Category: Debit
+   Description: Auto Loan Payment (Loan #LN2022080012345)
+   Amount: $350.00
+
+Account Balances:
+Checking Account Balance: $3,247.68
+Savings Account Balance: $12,987.29
+
+Loan Details:
+Loan Type: Auto Loan
+Loan Number: LN2022080012345
+Outstanding Balance: $15,000.00
+Next Payment Due: 05/01/2024
+Amount Due: $350.00
+
+User Email: user@example.com
+
+Thank you for banking with Woodgrove Financial.
+
+----------------------------------------------------------------

@@ -1,0 +1,20 @@
+Transaction Alert for John Doe
+
+Account: ********9876 (Checking Account)
+Bank: Woodgrove Financial
+Date: 04/03/2024
+Time: 11:32 AM
+Transaction ID: TXN2024040311320001
+Transaction Type: Online Transfer
+Transaction Category: Debit
+
+Description: Online Transfer
+
+Amount: $500.00
+ 
+New Checking Balance: $3,247.68
+New Savings Balance: $12,987.29
+
+User Email: user@example.com
+
+Thank you for banking with Woodgrove Financial.
