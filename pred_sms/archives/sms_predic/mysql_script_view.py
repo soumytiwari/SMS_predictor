@@ -7,14 +7,9 @@ mydb = mysql.connector.connect(
     database=""
 )
 
-print(mydb)
-
-# Create a cursor object
 mycursor = mydb.cursor()
 
-# mycursor.execute("CREATE DATABASE trans_database")
-
-mycursor.execute("SHOW DATABASES")
+mycursor.execute("SHOW TABLES")
 
 for x in mycursor:
-    print(x)
+  print(x)

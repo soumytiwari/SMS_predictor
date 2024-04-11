@@ -33,3 +33,4 @@ mycursor.execute("SET FOREIGN_KEY_CHECKS = 1")
 
 # Commit changes
 mydb.commit()
+

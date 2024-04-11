@@ -54,11 +54,11 @@ class MyApp(Flask):
         super().__init__(*args, **kwargs)
 
         # MySQL database connection
-        self.db = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="mysql@MUMU.0",
-            database="mydatabase"
+        self.db = mydb = mysql.connector.connect(
+            host="",
+            user="",
+            password="",
+            database=""
         )
 
         # Root URL handler

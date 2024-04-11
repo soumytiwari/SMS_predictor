@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 class Main:
     def __init__(self) -> None:
-        self.mydb = mysql.connector.connect(
+        self.mydb = mydb = mysql.connector.connect(
             host="",
             user="",
             password="",

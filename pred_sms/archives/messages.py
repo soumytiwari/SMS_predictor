@@ -1,9 +1,7 @@
 import mysql.connector
-from faker import Faker
 import random
 import datetime
 
-fake = Faker()
 
 
 class TransactionSystem:
@@ -62,18 +60,13 @@ class TransactionSystem:
             print("-" * 20)
     
     def calculate_credit_score(self, transactions):
-     # Calculate the credit score based on the transaction history
-        sql = "SELECT t_type, t_amt, t_date " \
-              "FROM transaction_table " \
-              "WHERE acc_no IN (SELECT acc_no FROM bank_account WHERE p_no = %s)"
-        self.mycursor.execute(sql, (self.user_phone,))
-        results = self.mycursor.fetchall()
-
+        # Calculate the credit score based on the transaction history
         credit_score = 700  # Start with a default credit score of 700
-        for row in results:
-            t_type = row[0]
-            t_amt = row[1]
-            t_date = row[2]
+
+        for transaction in transactions:
+            t_type = transaction[5]
+            t_amt = transaction[4]
+            t_date = transaction[2]
 
             # Adjust the credit score based on the transaction type and amount
             if t_type == 'Withdrawal':
@@ -92,7 +85,7 @@ class TransactionSystem:
                     credit_score += 5
 
             # Adjust the credit score based on the transaction date
-            today = datetime.now().date()
+            today = datetime.date.today()
             days_since_transaction = (today - t_date).days
             if days_since_transaction < 30:
                 credit_score -= 5
@@ -103,14 +96,12 @@ class TransactionSystem:
             else:
                 credit_score += 5
 
-        print(f"Your calculated credit score is: {credit_score}")
-        return credit_score
+        max_score = 850
+        min_score = 300
+        credit_score_percentage = (credit_score - min_score) / (max_score - min_score) * 100
 
+        return min(max(credit_score, min_score), max_score), credit_score_percentage
 
-    # def calculate_credit_score(self, transactions):
-    # #     # Implement credit score calculation logic here
-    # #     # Return a credit score value based on the transactions
-    #     return credit_score
 
     def get_max_credit_transaction(self, account_number, year=None, month=None):
         conditions = [f"acc_no = '{account_number}'"]
@@ -278,96 +269,116 @@ class TransactionSystem:
         self.mycursor.execute("SELECT t_id, acc_no, t_date, t_time, t_amt, t_type, t_cat FROM transaction_table WHERE acc_no = %s", (account_number,))
         return self.mycursor.fetchall()
 
-    def calculate_credit_score(self, transactions):
-        # Implement credit score calculation logic here
-        # Return a credit score value based on the transactions
-        # For now, returning a random score between 300 and 850
-        return random.randint(300, 850)
 
-def main(self):
-    phone_number = input("Enter your phone number: ")
-    user_name, accounts, phone_number = self.find_user_by_phone(phone_number)
+    def main(self):
+        phone_number = input("Enter your phone number: ")
+        user_name, accounts, phone_number = self.find_user_by_phone(phone_number)
 
-    if user_name is None:
-        print("Invalid phone number. Exiting.")
-        return
-
-    print(f"Welcome, {user_name}! Here are your associated bank accounts:")
-    for index, account in enumerate(accounts):
-        print(f"{index + 1}. {account[0]}***** ({account[1]}) - Balance: {account[2]:.2f}")
-
-    choice = input("Would you like to see bank information or stats? (Enter 'bank' or 'stats'): ").lower()
-
-    if choice == 'bank':
-        account_numbers = [account[0] for account in accounts]
-        print("Please choose one of the following account numbers:")
-        for index, account_number in enumerate(account_numbers):
-            print(f"{index + 1}. {account_number}*****")
-        user_input = input("Enter the number corresponding to the account you want to view: ")
-        self.display_bank_information(user_input)
-    elif choice == 'stats':
-        print("Please choose one of your bank accounts:")
-        for index, account in enumerate(accounts):
-            print(f"{index + 1}. {account[1]} - {account[0]}*****")
-        user_input = input("Enter the number corresponding to the account you want to view stats for: ")
-
-        if not user_input:
-            print("No account selected. Exiting.")
+        if user_name is None:
+            print("Invalid phone number. Exiting.")
             return
 
-        account_number = accounts[user_input - 1][0]
-        bank_name = accounts[user_input - 1][1]
+        print(f"Welcome, {user_name}! Here are your associated bank accounts:")
+        for index, account in enumerate(accounts):
+            print(f"{index + 1}. ******{account[0][-4:]} ({account[1]}) - Balance: {account[2]:.2f}")
 
-        print(f"Showing stats for account {account_number} in {bank_name}:")
+        choice = input("Would you like to see bank information or stats? (Enter 'bank' or 'stats'): ").lower()
 
-        # Display stats options
-        while True:
-            print("\nStats Menu:")
-            print("1. Max. Amount Credited at Once")
-            print("2. Max. Amount Debited at Once")
-            print("3. Credit Score")
-            print("4. Annual Income")
-            print("5. Annual Saving")
-            print("6. Most Used Bank")
-            print("7. Expenditure")
-            print("8. Exit")
+        if choice == 'bank':
+            account_numbers = [account[0] for account in accounts]
+            print("Please choose one of the following account numbers:")
+            for index, account_number in enumerate(account_numbers):
+                print(f"{index + 1}. {account_number}*****")
+            user_input = input("Enter the number corresponding to the account you want to view: ")
+            self.display_bank_information(user_input)
+        elif choice == 'stats':
+            print("Please choose one of your bank accounts:")
+            for index, account in enumerate(accounts):
+                print(f"{index + 1}. {account[1]} - {account[0]}*****")
+            user_input = input("Enter the number corresponding to the account you want to view stats for: ")
 
-            option = input("Enter your choice: ")
+            if not user_input:
+                print("No account selected. Exiting.")
+                return
 
-            if option == '1':
-                year = input("Enter the year (YYYY) or leave blank for current year: ")
-                month = input("Enter the month (MM) or leave blank: ")
-                max_credit = self.get_max_credit_transaction(account_number, year=year, month=month)
-                if max_credit:
-                    print(f"Transaction ID: {max_credit[0]}")
-                    print(f"Date: {max_credit[2]}")
-                    print(f"Time: {max_credit[3]}")
-                    print(f"Amount: {max_credit[4]:.2f}")
-                    print(f"Type: {max_credit[5]}")
-                    print(f"Category: {max_credit[6]}")
+            account_number = accounts[user_input - 1][0]
+            bank_name = accounts[user_input - 1][1]
+
+            print(f"Showing stats for account {account_number} in {bank_name}:")
+
+            # Display stats options
+            while True:
+                print("\nStats Menu:")
+                print("1. Max. Amount Credited at Once")
+                print("2. Max. Amount Debited at Once")
+                print("3. Credit Score")
+                print("4. Annual Income")
+                print("5. Annual Saving")
+                print("6. Most Used Bank")
+                print("7. Expenditure")
+                print("8. Exit")
+
+                option = input("Enter your choice: ")
+
+                if option == '1':
+                    year = input("Enter the year (YYYY) or leave blank for current year: ")
+                    month = input("Enter the month (MM) or leave blank: ")
+                    max_credit = self.get_max_credit_transaction(account_number, year=year, month=month)
+                    if max_credit:
+                        print(f"Transaction ID: {max_credit[0]}")
+                        print(f"Date: {max_credit[2]}")
+                        print(f"Time: {max_credit[3]}")
+                        print(f"Amount: {max_credit[4]:.2f}")
+                        print(f"Type: {max_credit[5]}")
+                        print(f"Category: {max_credit[6]}")
+                    else:
+                        print("No credit transactions found.")
+                elif option == '2':
+                    year = input("Enter the year (YYYY) or leave blank for current year: ")
+                    month = input("Enter the month (MM) or leave blank: ")
+                    max_debit = self.get_max_debit_transaction(account_number, year=year, month=month)
+                    if max_debit:
+                        print(f"Transaction ID: {max_debit[0]}")
+                        print(f"Date: {max_debit[2]}")
+                        print(f"Time: {max_debit[3]}")
+                        print(f"Amount: {max_debit[4]:.2f}")
+                        print(f"Type: {max_debit[5]}")
+                        print(f"Category: {max_debit[6]}")
+                    else:
+                        print("No debit transactions found.")
+                elif option == '3':
+                    print("\nCredit Score:")
+                    transactions = self.get_transactions(account_number)
+                    credit_score, credit_score_percentage = self.calculate_credit_score(transactions)
+                    print(f"Your credit score is: {credit_score} ({credit_score_percentage:.2f}%)")
+                elif option == '4':
+                    year = input("Enter the year (YYYY) or leave blank for current year: ")
+                    annual_income = self.get_annual_income(account_number, year=year)
+                    print(f"Your annual income is: {annual_income:.2f}")
+                elif option == '5':
+                    year = input("Enter the year (YYYY) or leave blank for current year: ")
+                    annual_saving = self.get_annual_saving(account_number, year=year)
+                    print(f"Your annual saving: {annual_saving:.2f}")
+
+                elif option == '6':
+                    most_used_bank = self.get_most_used_bank(self.user_phone)[0]
+                    print(f"Your most used bank is: {most_used_bank}")
+                elif option == '7':
+                    year = input("Enter the year (YYYY) or leave blank for current year: ")
+                    month = input("Enter the month (MM) or leave blank: ")
+                    expenditure = self.get_expenditure(account_number, year=year, month=month)
+                    print(f"Your expenditure for the selected period is: {expenditure:.2f}")
+                elif option == '8':
+                    break
                 else:
-                    print("No credit transactions found.")
-            elif option == '2':
-                year = input("Enter the year (YYYY) or leave blank for current year: ")
-                month = input("Enter the month (MM) or leave blank: ")
-                max_debit = self.get_max_debit_transaction(account_number, year=year, month=month)
-                if max_debit:
-                    print(f"Transaction ID: {max_debit[0]}")
-                    print(f"Date: {max_debit[2]}")
-                    print(f"Time: {max_debit[3]}")
-                    print(f"Amount: {max_debit[4]:.2f}")
-                    print(f"Type: {max_debit[5]}")
-                    print(f"Category: {max_debit[6]}")
-                else:
-                    print("No debit transactions found.")
-            elif option == '3':
-                transactions = self.get_transactions(account_number)
-                credit_score = self.calculate_credit_score(transactions)
-                print(f"Your credit score is: {credit_score}")
-            elif option == '4':
-                year = input("Enter the year (YYYY) or leave blank for current year: ")
-                annual_income = self.get_annual_income(account_number, year=year)
-                print(f"Your annual income is: {annual_income:.2f}")
-            elif option == '5':
-                year = input("Enter the year (YYYY) or leave blank for current year: ")
-                annual_saving = self.get_annual_saving
+                    print("Invalid choice. Please try again.")
+
+
+if __name__ == "__main__":
+    db_host = ""
+    db_user = ""
+    db_password = ""
+    db_database = ""
+
+    transaction_system = TransactionSystem(db_host, db_user, db_password, db_database)
+    transaction_system.main()
