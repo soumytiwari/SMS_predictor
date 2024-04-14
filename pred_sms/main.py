@@ -189,9 +189,15 @@ class TransactionSystem:
         ORDER BY t.t_amt DESC, t.t_date DESC, t.t_time DESC
         LIMIT 1
         """.format(conditions_clause=conditions_clause)
-        res_ch = ['10000', '20000', '30000', '14570', '60500', '8100', '12500','24599','44400', '51050', '100500', '32870', '1200000', '2500000', '175000', '250750']
-        res = random.choice(res_ch)
-        return res
+        # res_ch = ['10000', '20000', '30000', '14570', '60500', '8100', '12500','24599','44400', '51050', '100500', '32870', '1200000', '2500000', '175000', '250750']
+        # res = random.choice(res_ch)
+        # return res
+
+        self.mycursor.execute(sql, values)
+        self.mycursor.execute(sql, values)
+        max_credit = self.mycursor.fetchone()
+        
+        return max_credit
 
     def get_max_debit_transaction(self, account_number, phone_number, year=None, month=None):
         conditions = ["b.acc_no = %s", "p.p_no = %s"]
@@ -217,14 +223,16 @@ class TransactionSystem:
         LIMIT 1
         """.format(conditions_clause=conditions_clause)
 
-        # self.mycursor.execute(sql, values)
-        # self.mycursor.execute(sql, values)
-        # max_debit = self.mycursor.fetchone()
 
-        res_ch = ['10000', '20000', '30099', '14570', '60500', '8100', '12500', '24599' ,'44400', '51050', '100500', '32870', '12000','16679','25000', '17500', '25750']
-        res = random.choice(res_ch)
-        return res
+        # res_ch = ['10000', '20000', '30099', '14570', '60500', '8100', '12500', '24599' ,'44400', '51050', '100500', '32870', '12000','16679','25000', '17500', '25750']
+        # res = random.choice(res_ch)
+        # return res
     
+        self.mycursor.execute(sql, values)
+        self.mycursor.execute(sql, values)
+        max_debit = self.mycursor.fetchone()
+
+        return max_debit
 
     def get_transactions(self, account_number, phone_number):
         self.mycursor.execute("""
@@ -304,8 +312,10 @@ class TransactionSystem:
         
         res = self.mycursor.fetchone()[0] or 0
         print(f"Your annual income is: {res:.2f}")
-        res_ch = [random.randint(10000, 5000000) for _ in range(20)]
-        res = random.choice(res_ch)
+        # res_ch = [random.randint(10000, 5000000) for _ in range(20)]
+        # res = random.choice(res_ch)
+
+        # return f"{res:.2f}"
 
         return f"{res:.2f}"
     
@@ -330,8 +340,8 @@ class TransactionSystem:
         self.mycursor.execute(sql, values)
         # return self.mycursor.fetchone()[0] or 0
         res = self.mycursor.fetchone()[0] or 0
-        res_ch = [random.randint(1000, 500000) for _ in range(20)]
-        res = random.choice(res_ch)
+        # res_ch = [random.randint(1000, 500000) for _ in range(20)]
+        # res = random.choice(res_ch)
         return f"{res:.2f}"
     
     def get_most_used_bank(self, phone_number):
@@ -493,6 +503,7 @@ class TransactionSystem:
 
     # Function to get a random month index
     def get_most_exp_month(self, phone_no):
+        # implement
         # List of months
         months = ['January', 'February', 'March', 'April', 'May', 'June',
                 'July', 'August', 'September', 'October', 'November', 'December']
